@@ -58,7 +58,7 @@ namespace ConnectFour
 		/// The leftmost column is column 0, the upmost row is row 0, so field[0,0] is the top-left position,field[6,5] is bottom right)
 		/// </summary>
 		int[,] field;
-
+		
 		bool isPlayersTurn = true; // true - Player 1's turn, false - Player 2's turn
 		bool isHumansTurn = false; // Flag that marks if we are currently in a human-controlled turn
 		bool isLoading = true;

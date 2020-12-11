@@ -40,6 +40,7 @@ public class MinimaxAI : BaseAI
             // Full chess board, draw game || iddfs constraint reached
             return m_heuristic.GetScoreOfBoard(m_gameController.GetField(), cur_step_color);
         }
-        
+
+        return 0;
     }
 }

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="38b4c520-8e47-420f-bfaa-a6a9b158db89" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.2020AIProj_Connect4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.2020AIProj_Connect4/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scenes/game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scenes/game.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +61,7 @@
       <updated>1607223465725</updated>
       <workItem from="1607223479480" duration="760000" />
       <workItem from="1607224991613" duration="310000" />
+      <workItem from="1607762905772" duration="1426000" />
     </task>
     <servers />
   </component>

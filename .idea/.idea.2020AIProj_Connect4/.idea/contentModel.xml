@@ -16,6 +16,7 @@
             <e p="GameController.cs" t="Include" />
             <e p="HeuristicsMinimax.cs" t="Include" />
             <e p="HumanControlAI.cs" t="Include" />
+            <e p="MinimaxAI.cs" t="Include" />
             <e p="OneStepMaximizationAI.cs" t="Include" />
           </e>
         </e>

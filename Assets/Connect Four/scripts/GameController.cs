@@ -297,7 +297,7 @@ namespace ConnectFour
 			return possibleMoves;
 		}
 		/// <summary>
-		/// Return the field as int 2D array
+		/// Return the field as int 2D array. It returns reference, so don't modify it by other scripts
 		/// </summary>
 		/// <returns></returns>
 		public int[,] GetField()
@@ -305,9 +305,11 @@ namespace ConnectFour
 			return field;
 		}
 		/// <summary>
-		/// Return the field after a given action, probably used for evaluation
+		/// Return the field after a given action, probably used for evaluation.
+		/// Note that this returns a clone of the original field. 
 		/// </summary>
 		/// <param name="column">The column you wish to take your move on</param>
+		/// <param name="playerNum">The player who take the action</param>
 		/// <returns></returns>
 		public int[,] GetFieldAfterMove(int[,] f, int column, int playerNum)
 		{

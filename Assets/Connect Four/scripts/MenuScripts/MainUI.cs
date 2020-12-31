@@ -13,6 +13,7 @@ public class MainUI : MonoBehaviour
     [SerializeField] private Dropdown m_heurConfigDropDown;
 
     private MenuController m_controller;
+    private Dropdown.OptionData m_configingHeur;
     private void Start()
     {
         foreach (var player in MenuController.GetMenuController().m_p1List)
@@ -39,5 +40,46 @@ public class MainUI : MonoBehaviour
         m_controller.ChangePlayer(2,m_player2DropDown.options[m_player2DropDown.value]);
         m_controller.ChangePlayerHeuristic(1, m_heur1DropDown.options[m_heur1DropDown.value]);
         m_controller.ChangePlayerHeuristic(2, m_heur2DropDown.options[m_heur2DropDown.value]);
+        m_configingHeur = m_heurConfigDropDown.options[m_heurConfigDropDown.value];
     }
+
+    public void OnPlayerChanged(int value)
+    {
+        Dropdown mod = null;
+        switch (value)
+        {
+            case 1:
+                mod = m_player1DropDown;
+                break;
+            case 2:
+                mod = m_player2DropDown;
+                break;
+            default:
+                Debug.LogError("OnPlayerChanged Error!");
+                mod = m_player1DropDown;
+                break;
+        }
+        m_controller.ChangePlayer(value, mod.options[mod.value]);
+    }
+    
+
+    public void OnHeuristicChanged(int value)
+    {
+        Dropdown mod = null;
+        switch (value)
+        {
+            case 1:
+                mod = m_heur1DropDown;
+                break;
+            case 2:
+                mod = m_heur2DropDown;
+                break;
+            default:
+                Debug.LogError("OnPlayerChanged Error!");
+                mod = m_heur1DropDown;
+                break;
+        }
+        m_controller.ChangePlayerHeuristic(value, mod.options[mod.value]);
+    }
+    
 }

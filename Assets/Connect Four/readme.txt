@@ -19,4 +19,12 @@ Kenney.nl for Sprites, Soundeffect and Font
 Contact:
 eikester@hotmail.de
 
+Connect Four - Stronger AI
+
+Author: ShanghaiTech CS181 2020Fall Group 7: Zhixin Fang, Yijing Ren, Songhui Cao
+
+Feature:
+- Modified the base game so that multiple AIs can be selected. You can also play the game yourself.
+- Implemented Heuristics to evaluate the game status for AI
+- Implemented several AIs (Support Connect 4 default settings only), based on different algorithms
 

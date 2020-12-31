@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class OneStepMaximizationAI : BaseAI
 {
-    [SerializeField] private BaseHeuristic m_heuristic;
+    // [SerializeField] private BaseHeuristic m_heuristic;
     [SerializeField] private int playerNum;
     private void Start()
     {

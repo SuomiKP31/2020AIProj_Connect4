@@ -10,14 +10,20 @@
         <e p="Connect Four" t="Include">
           <e p="readme.txt" t="Include" />
           <e p="scripts" t="Include">
-            <e p="BaseAI.cs" t="Include" />
-            <e p="BaseHeuristic.cs" t="Include" />
-            <e p="CameraSize.cs" t="Include" />
-            <e p="GameController.cs" t="Include" />
-            <e p="HeuristicsMinimax.cs" t="Include" />
-            <e p="HumanControlAI.cs" t="Include" />
-            <e p="MinimaxAI.cs" t="Include" />
-            <e p="OneStepMaximizationAI.cs" t="Include" />
+            <e p="GameScripts" t="Include">
+              <e p="BaseAI.cs" t="Include" />
+              <e p="BaseHeuristic.cs" t="Include" />
+              <e p="CameraSize.cs" t="Include" />
+              <e p="GameController.cs" t="Include" />
+              <e p="HeuristicsMinimax.cs" t="Include" />
+              <e p="HumanControlAI.cs" t="Include" />
+              <e p="MinimaxAI.cs" t="Include" />
+              <e p="OneStepMaximizationAI.cs" t="Include" />
+            </e>
+            <e p="MenuScripts" t="Include">
+              <e p="MainUI.cs" t="Include" />
+              <e p="MenuController.cs" t="Include" />
+            </e>
           </e>
         </e>
       </e>

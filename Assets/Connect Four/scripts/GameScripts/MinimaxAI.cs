@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MinimaxAI : BaseAI
 {
-    [SerializeField] private BaseHeuristic m_heuristic;
+    // [SerializeField] private BaseHeuristic m_heuristic;
     // Start is called before the first frame update
     void Start()
     {

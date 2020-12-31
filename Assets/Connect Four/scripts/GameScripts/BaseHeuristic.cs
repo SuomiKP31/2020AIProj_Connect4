@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class BaseHeuristic : MonoBehaviour
@@ -32,5 +33,26 @@ public class BaseHeuristic : MonoBehaviour
     public virtual int GetScoreOfBoard(int[,] field, int playerNum)
     {
         return 0;
+    }
+
+    public void ChangeBlockFac(int fac)
+    {
+        BlockFac = fac;
+    }
+    public void ChangeGoodFac(int fac)
+    {
+        GoodFac = fac;
+    }
+    public void ChangeDangerFac(int fac)
+    {
+        DangerFac = fac;
+    }
+    public void ChangeWinFac(int fac)
+    {
+        WinFac = fac;
+    }
+    public void ChangeLoseFac(int fac)
+    {
+        LoseFac = fac;
     }
 }

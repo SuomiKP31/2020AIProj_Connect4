@@ -1,20 +1,32 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using ConnectFour;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
+    public enum HeurAttribute
+    {
+        BlockFactor = 0,
+        GoodFactor = 1,
+        WinFactor = 2,
+        DangerFactor = 3,
+        LoseFactor = 4
+    }
+    
     private static MenuController m_instance;
-    [SerializeField] private GameObject m_playerHolder;
-    [SerializeField] private GameObject m_heuristicHolder;
+    [SerializeField] public GameObject m_playerHolder;
+    [SerializeField] public GameObject m_heuristicHolder;
     public List<GameObject> m_heuristicList;
     public List<GameObject> m_p1List;
     public List<GameObject> m_p2List;
 
-    private GameObject player1;
-    private GameObject player2;
+    public GameObject player1;
+    public GameObject player2;
     private void Awake()
     {
         // if the singleton hasn't been initialized yet
@@ -57,5 +69,56 @@ public class MenuController : MonoBehaviour
                 player2.GetComponent<BaseAI>().ChangeHeuristic(m_heuristicHolder.transform.Find(data.text).gameObject.GetComponent<BaseHeuristic>());
                 break;
         }
+    }
+    
+
+    public void ChangeHeuristicAttribute(Dropdown.OptionData data, HeurAttribute attribute, string value)
+    {
+        var heur = m_heuristicHolder.transform.Find(data.text).gameObject.GetComponent<BaseHeuristic>();
+        int param = Convert.ToInt32(value);
+        switch (attribute)
+        {
+            case HeurAttribute.BlockFactor:
+                heur.ChangeBlockFac(param);
+                break;
+            case HeurAttribute.GoodFactor:
+                heur.ChangeGoodFac(param);
+                break;
+            case HeurAttribute.WinFactor:
+                heur.ChangeWinFac(param);
+                break;
+            case HeurAttribute.DangerFactor:
+                heur.ChangeDangerFac(param);
+                break;
+            case HeurAttribute.LoseFactor:
+                heur.ChangeLoseFac(param);
+                break;
+            default:
+                Debug.LogError("Attribute Config Error");
+                break;
+        }
+    }
+
+    public List<int> GetHeurAttributeList(Dropdown.OptionData data)
+    {
+        var heur = m_heuristicHolder.transform.Find(data.text).gameObject.GetComponent<BaseHeuristic>();
+        return heur.GetFactorList();
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("game");
+        // StartCoroutine(WaitTillLoadEnd());
+    }
+
+    private IEnumerator WaitTillLoadEnd()
+    {
+        while (SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            yield return null;
+        }
+        var gameController = GameController.GetController();
+        gameController.player1AI = player1.GetComponent<BaseAI>();
+        gameController.player2AI = player2.GetComponent<BaseAI>();
     }
 }

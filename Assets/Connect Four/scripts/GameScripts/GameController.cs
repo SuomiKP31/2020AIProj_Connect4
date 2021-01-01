@@ -58,7 +58,8 @@ namespace ConnectFour
 		/// The leftmost column is column 0, the upmost row is row 0, so field[0,0] is the top-left position,field[6,5] is bottom right)
 		/// </summary>
 		int[,] field;
-		
+
+		bool isGameStarted = false;
 		bool isPlayersTurn = true; // true - Player 1's turn, false - Player 2's turn
 		bool isHumansTurn = false; // Flag that marks if we are currently in a human-controlled turn
 		bool isLoading = true;
@@ -79,6 +80,8 @@ namespace ConnectFour
 			}
  
 			m_instance = this;
+			player1AI = MenuController.GetMenuController().player1.GetComponent<BaseAI>();
+			player2AI = MenuController.GetMenuController().player2.GetComponent<BaseAI>();
 		}
 
 		public static GameController GetController()
@@ -87,26 +90,9 @@ namespace ConnectFour
 		}
 		
 		// Self Initialization
-		void Start () 
+		void Start ()
 		{
-			int max = Mathf.Max (numRows, numColumns);
-
-			if(numPiecesToWin > max)
-				numPiecesToWin = max;
-
-			CreateField ();
-
-			isPlayersTurn = System.Convert.ToBoolean(Random.Range (0, 1));
-			if (isPlayersTurn)
-			{
-				isHumansTurn = player1AI.isHuman;
-			}
-			else
-			{
-				isHumansTurn = player2AI.isHuman;
-			}
-
-			btnPlayAgainOrigColor = btnPlayAgain.GetComponent<Renderer>().material.color;
+			StartCoroutine(WaitForReady());
 		}
 
 		/// <summary>
@@ -198,6 +184,11 @@ namespace ConnectFour
 					btnPlayAgainTouching = true;
 					
 					//CreateField();
+					//Destroy menu stuff and restart the game
+					var menu = MenuController.GetMenuController();
+					Destroy(menu.m_playerHolder);
+					Destroy(menu.m_heuristicHolder);
+					Destroy(menu.gameObject);
 					SceneManager.LoadScene(0);
 				}
 			}
@@ -215,6 +206,9 @@ namespace ConnectFour
 		// Update is called once per frame
 		void Update () 
 		{
+			if(!isGameStarted)
+				return;
+			
 			if(isLoading)
 				return;
 
@@ -525,5 +519,35 @@ namespace ConnectFour
 			}
 			return false;
 		}
+
+		IEnumerator WaitForReady()
+		{
+			while (player1AI == null || player2AI == null)
+			{
+				yield return null;
+			}
+			int max = Mathf.Max (numRows, numColumns);
+
+			if(numPiecesToWin > max)
+				numPiecesToWin = max;
+
+			CreateField ();
+
+			isPlayersTurn = System.Convert.ToBoolean(Random.Range (0, 1));
+			if (isPlayersTurn)
+			{
+				isHumansTurn = player1AI.isHuman;
+			}
+			else
+			{
+				isHumansTurn = player2AI.isHuman;
+			}
+
+			btnPlayAgainOrigColor = btnPlayAgain.GetComponent<Renderer>().material.color;
+
+			
+			isGameStarted = true;
+		}
 	}
+	
 }

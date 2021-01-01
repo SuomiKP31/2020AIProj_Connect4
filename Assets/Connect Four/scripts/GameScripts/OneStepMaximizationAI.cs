@@ -8,12 +8,12 @@ public class OneStepMaximizationAI : BaseAI
 {
     // [SerializeField] private BaseHeuristic m_heuristic;
     [SerializeField] private int playerNum;
-    private void Start()
-    {
-        m_gameController = GameController.GetController();
-    }
     public override Vector3 GetAction()
     {
+        if (m_gameController == null)
+        {
+            m_gameController = GameController.GetController();
+        }
         Vector3 spawnPos = new Vector3();
         
         List<int> moves = m_gameController.GetPossibleMoves();

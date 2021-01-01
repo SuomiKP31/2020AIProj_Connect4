@@ -35,6 +35,8 @@ public class BaseHeuristic : MonoBehaviour
         return 0;
     }
 
+    #region FactorOps
+
     public void ChangeBlockFac(int fac)
     {
         BlockFac = fac;
@@ -55,4 +57,11 @@ public class BaseHeuristic : MonoBehaviour
     {
         LoseFac = fac;
     }
+
+    public List<int> GetFactorList()
+    {
+        return new List<int>() {BlockFac, GoodFac, WinFac, DangerFac, LoseFac};
+    }
+    #endregion
+    
 }

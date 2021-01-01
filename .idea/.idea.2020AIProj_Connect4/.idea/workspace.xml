@@ -21,8 +21,15 @@
   <component name="ChangeListManager">
     <list default="true" id="38b4c520-8e47-420f-bfaa-a6a9b158db89" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.2020AIProj_Connect4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.2020AIProj_Connect4/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scenes/game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scenes/game.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scenes/menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scenes/menu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/GameController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,23 +40,22 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/71/5ef7ce4d/Socket.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameController.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/readme.txt" />
-        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" />
-        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" />
-        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseAI.cs" />
-        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" />
+        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" />
+        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" />
+        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/GameController.cs" />
       </list>
     </option>
   </component>
@@ -64,22 +70,23 @@
     <property name="Discover.Launch.Via.Unity" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C#" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
-    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2204">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="2204" />
+      <option name="pid" />
       <option name="selectedOptions">
         <set />
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2204">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="2204" />
+      <option name="pid" />
       <option name="selectedOptions">
         <set />
       </option>
@@ -98,6 +105,7 @@
       <workItem from="1607224991613" duration="310000" />
       <workItem from="1607762905772" duration="1426000" />
       <workItem from="1609411531869" duration="10647000" />
+      <workItem from="1609480594932" duration="8571000" />
     </task>
     <servers />
   </component>
@@ -116,6 +124,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
@@ -185,13 +194,17 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="2005" height="403" key="GridCell.Tab.3.right/0.0.2048.1112@0.0.2048.1112" timestamp="1609423188593" />
+    <state x="526" y="201" key="SettingsEditor" timestamp="1609484127577">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="526" y="201" key="SettingsEditor/0.0.2048.1112@0.0.2048.1112" timestamp="1609484127577" />
     <state x="569" y="293" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1609418992027">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="569" y="293" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.2048.1112@0.0.2048.1112" timestamp="1609418992027" />
-    <state x="687" y="243" width="672" height="678" key="search.everywhere.popup" timestamp="1609415532402">
+    <state x="687" y="243" width="672" height="678" key="search.everywhere.popup" timestamp="1609483271209">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="687" y="243" width="672" height="678" key="search.everywhere.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1609415532402" />
+    <state x="687" y="243" width="672" height="678" key="search.everywhere.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1609483271209" />
   </component>
 </project>

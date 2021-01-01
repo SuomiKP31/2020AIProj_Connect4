@@ -9,13 +9,13 @@ public class MinimaxAI : BaseAI
 {
     // [SerializeField] private BaseHeuristic m_heuristic;
     // Start is called before the first frame update
-    void Start()
-    {
-        m_gameController = GameController.GetController();
-    }
 
     public override Vector3 GetAction()
     {
+        if (m_gameController == null)
+        {
+            m_gameController = GameController.GetController();
+        }
         return new Vector3(IDdfs(7, 1, 0, 0), 0, 0);
     }
     /// <summary>

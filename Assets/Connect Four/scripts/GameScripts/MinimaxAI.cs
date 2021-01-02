@@ -11,6 +11,7 @@ public class MinimaxAI : BaseAI
     // Start is called before the first frame update
 
     private int[,] field;
+    [SerializeField] private int playerNum;
     public int BestAction = 0;
 
     public override Vector3 GetAction()
@@ -22,13 +23,13 @@ public class MinimaxAI : BaseAI
 
         field = m_gameController.GetField();
         int alpha = Int32.MinValue, beta = Int32.MaxValue;
-        IDdfs(7, 1, true, alpha, beta);
+        IDdfs(7, playerNum, true, alpha, beta);
 
         return new Vector3(BestAction, 0, 0);
     }
 
     /// <summary>
-    /// Returns the value of optimal action for player curStepColor.
+    /// Returns the value of optimal score for player curStepColor.
     /// </summary>
     /// <param name="maxdepth"> The maximum depth for our iddfs.</param>
     /// <param name="curStepColor"> What number is representing the target player, typically 1(Blue) or 2(Red). You only need to specify initial conditions, and this function will automatically handle the switch process.</param>
@@ -57,9 +58,9 @@ public class MinimaxAI : BaseAI
                 // Now change the field.
                 for (int j = 0; j < m_gameController.numRows; j++)
                 {
-                    if (field[moves[i], j] == 0)
+                    if (field[moves[i], j] != 0)
                     {
-                        field[moves[i], j] = curStepColor;
+                        field[moves[i], j+1] = curStepColor;
                         if (MinimaxAICheckWin(moves[i], j))
                         {
                             // Terminal state.
@@ -71,7 +72,7 @@ public class MinimaxAI : BaseAI
                             tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
                         }
                         // Now change back
-                        field[moves[i], j] = 0;
+                        field[moves[i], j+1] = 0;
 
                         if (tmp > ans)
                         {
@@ -103,9 +104,9 @@ public class MinimaxAI : BaseAI
                 // Now change the field.
                 for (int j = 0; j < m_gameController.numRows; j++)
                 {
-                    if (field[moves[i], j] == 0)
+                    if (field[moves[i], j] != 0)
                     {
-                        field[moves[i], j] = curStepColor;
+                        field[moves[i], j+1] = curStepColor;
                         if (MinimaxAICheckWin(moves[i], j))
                         {
                             // Terminal state.
@@ -117,7 +118,7 @@ public class MinimaxAI : BaseAI
                             tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
                         }
                         // Now change back
-                        field[moves[i], j] = 0;
+                        field[moves[i], j+1] = 0;
 
                         if (tmp < ans)
                         {
@@ -170,16 +171,14 @@ public class MinimaxAI : BaseAI
     public bool MinimaxAICheckWin(int row, int column)
     {
         int color = field[row, column];
-        int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
+        int count_hor = 0, count_ver = 0, count_dia = 0;
         int border_left = min(column, 3);
         int border_right = min(6 - column, 3);
         int border_down = min(row, 3);
         int border_up = min(5 - row, 3);
-        int border_left_down = min(border_left, border_down);
-        int border_right_up = min(border_right, border_up);
-        int border_right_down = min(border_right, border_down);
-        int border_left_up = min(border_left, border_up);
-        while(border_left > 0)
+        int border_dia_down = min(border_left, border_down);
+        int border_dia_up = min(border_right, border_up);
+        while(border_left > 0 || border_right > 0)
         {
             if(field[row, column - border_left] == color)
             {
@@ -190,11 +189,7 @@ public class MinimaxAI : BaseAI
             {
                 border_left = 0;
             }
-            
-        }
-        while ( border_right > 0)
-        {
-            if (field[row, column + border_right] == color)
+            if(field[row, column + border_right] == color)
             {
                 count_hor++;
                 border_right--;
@@ -204,7 +199,7 @@ public class MinimaxAI : BaseAI
                 border_right = 0;
             }
         }
-        while(border_up > 0 )
+        while(border_up > 0 || border_down > 0)
         {
             if(field[row + border_up, column] == color)
             {
@@ -215,11 +210,7 @@ public class MinimaxAI : BaseAI
             {
                 border_up = 0;
             }
-            
-        }
-        while(border_down > 0)
-        {
-            if (field[row - border_down, column] == color)
+            if(field[row - border_down, column] == color)
             {
                 count_ver++;
                 border_down--;
@@ -229,56 +220,28 @@ public class MinimaxAI : BaseAI
                 border_down = 0;
             }
         }
-        while(border_right_up > 0 )
+        while(border_dia_up > 0 || border_dia_down > 0)
         {
-            if(field[row + border_right_up, column + border_right_up] == color)
+            if(field[row + border_dia_up, column + border_dia_up] == color)
             {
-                count_dia_1++;
-                border_right_up--;
+                count_dia++;
+                border_dia_up--;
             }
             else
             {
-                border_right_up = 0;
+                border_dia_up = 0;
             }
-            
-        }
-        while( border_left_down > 0)
-        {
-            if (field[row - border_left_down, column - border_left_down] == color)
+            if(field[row - border_dia_down, column - border_dia_down] == color)
             {
-                count_dia_1++;
-                border_left_down--;
+                count_dia++;
+                border_dia_down--;
             }
             else
             {
-                border_left_down = 0;
+                border_dia_down = 0;
             }
         }
-        while (border_right_down > 0)
-        {
-            if (field[row - border_right_down, column + border_right_down] == color)
-            {
-                count_dia_2++;
-                border_right_down--;
-            }
-            else
-            {
-                border_right_down = 0;
-            }
-        }
-        while (border_left_up > 0)
-        {
-            if (field[row + border_left_up, column - border_left_up] == color)
-            {
-                count_dia_2++;
-                border_left_up--;
-            }
-            else
-            {
-                border_left_up = 0;
-            }
-        }
-        if (count_dia_1 >= 4 || count_dia_2 >= 4 || count_hor >= 4 || count_ver >= 4)
+        if (count_dia >= 4 || count_hor >= 4 || count_ver >= 4)
         {
             return true;
         }

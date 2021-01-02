@@ -22,7 +22,7 @@ public class MinimaxAI : BaseAI
 
         field = m_gameController.GetField();
         int alpha = Int32.MinValue, beta = Int32.MaxValue;
-        IDdfs(7, 1, false, alpha, beta);
+        IDdfs(7, 1, true, alpha, beta);
 
         return new Vector3(LastError, 0, 0);
     }

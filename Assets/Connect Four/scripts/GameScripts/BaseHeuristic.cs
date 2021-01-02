@@ -23,6 +23,8 @@ public class BaseHeuristic : MonoBehaviour
     protected int DangerFac = -20;
     [SerializeField]
     protected int LoseFac = -6000;
+
+    protected int LastError=0;
     
     /// <summary>
     /// Basic Function of any Heuristic functions. Takes the board and player tag as input, output a evaluation as a int
@@ -33,6 +35,18 @@ public class BaseHeuristic : MonoBehaviour
     public virtual int GetScoreOfBoard(int[,] field, int playerNum)
     {
         return 0;
+    }
+
+    /// <summary>
+    /// Returns extra information for the last call to GetScoreOfBoard.
+    /// Return 0 if not supported, 1 if in the middle of a game, 2 if player win, 3 if player lose.
+    /// </summary>
+    /// <returns>
+    /// 
+    /// </returns>
+    public virtual int GetLastError()
+    {
+        return LastError;
     }
 
     #region FactorOps

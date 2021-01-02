@@ -287,6 +287,26 @@ namespace ConnectFour
 			return possibleMoves;
 		}
 		/// <summary>
+		/// Gets all the possible moves.
+		/// </summary>
+		/// <returns>The possible moves.</returns>
+		public List<int> GetPossibleMoves(int[,] _sh_field)
+		{
+			List<int> possibleMoves = new List<int>();
+			for (int x = 0; x < numColumns; x++)
+			{
+				for(int y = numRows - 1; y >= 0; y--)
+				{
+					if(_sh_field[x, y] == (int)Piece.Empty)
+					{
+						possibleMoves.Add(x);
+						break;
+					}
+				}
+			}
+			return possibleMoves;
+		}
+		/// <summary>
 		/// Return the field as int 2D array. It returns reference, so don't modify it by other scripts
 		/// </summary>
 		/// <returns></returns>

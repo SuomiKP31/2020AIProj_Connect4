@@ -115,4 +115,9 @@ public class MainUI : MonoBehaviour
             m_heurConfigList[i].text = facList[i].ToString();
         }
     }
+
+    public void StartGame()
+    {
+        m_controller.StartGame();
+    }
 }

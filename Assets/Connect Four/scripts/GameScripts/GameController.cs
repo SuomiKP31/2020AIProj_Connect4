@@ -184,12 +184,8 @@ namespace ConnectFour
 					btnPlayAgainTouching = true;
 					
 					//CreateField();
-					//Destroy menu stuff and restart the game
-					var menu = MenuController.GetMenuController();
-					Destroy(menu.m_playerHolder);
-					Destroy(menu.m_heuristicHolder);
-					Destroy(menu.gameObject);
-					SceneManager.LoadScene(0);
+
+					SceneManager.LoadScene("menu");
 				}
 			}
 			else

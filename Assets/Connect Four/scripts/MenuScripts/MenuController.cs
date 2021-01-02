@@ -40,6 +40,12 @@ public class MenuController : MonoBehaviour
         m_instance = this;
     }
 
+    private void Start()
+    {
+        SceneManager.LoadScene("menu");
+        StartCoroutine(WaitTillLoadEnd());
+    }
+
     public static MenuController GetMenuController()
     {
         return m_instance;
@@ -117,8 +123,6 @@ public class MenuController : MonoBehaviour
         {
             yield return null;
         }
-        var gameController = GameController.GetController();
-        gameController.player1AI = player1.GetComponent<BaseAI>();
-        gameController.player2AI = player2.GetComponent<BaseAI>();
+        
     }
 }

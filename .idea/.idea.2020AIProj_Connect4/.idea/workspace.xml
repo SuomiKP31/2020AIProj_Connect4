@@ -21,12 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="38b4c520-8e47-420f-bfaa-a6a9b158db89" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.2020AIProj_Connect4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.2020AIProj_Connect4/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scenes/game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scenes/game.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scenes/menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scenes/menu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/GameController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
@@ -51,10 +47,10 @@
         <option value="$PROJECT_DIR$/Assets/Connect Four/readme.txt" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseAI.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/BaseHeuristic.cs" />
-        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/OneStepMaximizationAI.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/MinimaxAI.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MenuController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/MenuScripts/MainUI.cs" />
         <option value="$PROJECT_DIR$/Assets/Connect Four/scripts/GameScripts/GameController.cs" />
       </list>
     </option>
@@ -105,7 +101,8 @@
       <workItem from="1607224991613" duration="310000" />
       <workItem from="1607762905772" duration="1426000" />
       <workItem from="1609411531869" duration="10647000" />
-      <workItem from="1609480594932" duration="8571000" />
+      <workItem from="1609480594932" duration="8964000" />
+      <workItem from="1609555928936" duration="438000" />
     </task>
     <servers />
   </component>

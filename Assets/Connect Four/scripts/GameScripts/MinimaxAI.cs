@@ -11,7 +11,7 @@ public class MinimaxAI : BaseAI
     // Start is called before the first frame update
 
     private int[,] field;
-    public int LastError = 0;
+    public int BestAction = 0;
 
     public override Vector3 GetAction()
     {
@@ -22,9 +22,9 @@ public class MinimaxAI : BaseAI
 
         field = m_gameController.GetField();
         int alpha = Int32.MinValue, beta = Int32.MaxValue;
-        IDdfs(7, 1, false, alpha, beta);
+        IDdfs(7, 1, true, alpha, beta);
 
-        return new Vector3(LastError, 0, 0);
+        return new Vector3(BestAction, 0, 0);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class MinimaxAI : BaseAI
     /// <returns></returns>
     public int IDdfs(int maxdepth, int curStepColor, bool is_max, int alpha, int beta)
     {
-        LastError = 0;
+        BestAction = 0;
         List<int> moves = m_gameController.GetPossibleMoves(field);
         int step_cnt = 0, ans = 0, tmp, ta = alpha, tb = beta;
 
@@ -70,11 +70,13 @@ public class MinimaxAI : BaseAI
                             // We need to go deeper.
                             tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
                         }
+                        // Now change back
+                        field[moves[i], j] = 0;
 
                         if (tmp > ans)
                         {
                             // Do not use Math.Max here since we need to add Alpha-Beta later.
-                            LastError = moves[i];
+                            BestAction = moves[i];
                             ans = tmp;
                         }
 
@@ -85,8 +87,7 @@ public class MinimaxAI : BaseAI
 
                         alpha = Math.Max(alpha, ans);
 
-                        // Now change back
-                        field[moves[i], j] = 0;
+
                     }
 
                     // Default behavior on error is do nothing and return.
@@ -115,11 +116,13 @@ public class MinimaxAI : BaseAI
                             // We need to go deeper.
                             tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
                         }
+                        // Now change back
+                        field[moves[i], j] = 0;
 
                         if (tmp < ans)
                         {
                             // Do not use Math.Max here since we need to add Alpha-Beta later.
-                            LastError = moves[i];
+                            BestAction = moves[i];
                             ans = tmp;
                         }
 
@@ -130,8 +133,7 @@ public class MinimaxAI : BaseAI
 
                         beta = Math.Min(beta, ans);
 
-                        // Now change back
-                        field[moves[i], j] = 0;
+                        
                     }
 
                     // Default behavior on error is do nothing and return.

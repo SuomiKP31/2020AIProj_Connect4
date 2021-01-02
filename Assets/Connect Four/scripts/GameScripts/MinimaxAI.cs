@@ -70,6 +70,11 @@ public class MinimaxAI : BaseAI
         return a / gcd(a, b) * b;
     }
 
+    public int min (int a, int b)
+    {
+        return a < b ? a : b;
+    }
+
     /// <summary>
     /// Return true if the chess at row,column causes terminal in the field, false otherwise.
     /// No need to handle the draw game as a special case.
@@ -78,8 +83,84 @@ public class MinimaxAI : BaseAI
     /// <param name="row"> Coord </param>
     /// <param name="column"> Coord </param>
     /// <returns></returns>
-    public bool MinimaxAICheckWin(int[,] field,int row,int column)
+    public bool MinimaxAICheckWin(int row,int column)
     {
+        int color = field[row, column];
+        int count_hor = 0, count_ver = 0, count_dia = 0;
+        int border_left = min(column, 3);
+        int border_right = min(6 - column, 3);
+        int border_down = min(row, 3);
+        int border_up = min(5 - row, 3);
+        int border_dia_down = min(border_left, border_down);
+        int border_dia_up = min(border_right, border_up);
+        while(border_left > 0 || border_right > 0)
+        {
+            if(field[row, column - border_left] == color)
+            {
+                count_hor++;
+                border_left--;
+            }
+            else
+            {
+                border_left = 0;
+            }
+            if(field[row, column + border_right] == color)
+            {
+                count_hor++;
+                border_right--;
+            }
+            else
+            {
+                border_right = 0;
+            }
+        }
+        while(border_up > 0 || border_down > 0)
+        {
+            if(field[row + border_up, column] == color)
+            {
+                count_ver++;
+                border_up--;
+            }
+            else
+            {
+                border_up = 0;
+            }
+            if(field[row - border_down, column] == color)
+            {
+                count_ver++;
+                border_down--;
+            }
+            else
+            {
+                border_down = 0;
+            }
+        }
+        while(border_dia_up > 0 || border_dia_down > 0)
+        {
+            if(field[row + border_dia_up, column + border_dia_up] == color)
+            {
+                count_dia++;
+                border_dia_up--;
+            }
+            else
+            {
+                border_dia_up = 0;
+            }
+            if(field[row - border_dia_down, column - border_dia_down] == color)
+            {
+                count_dia++;
+                border_dia_down--;
+            }
+            else
+            {
+                border_dia_down = 0;
+            }
+        }
+        if (count_dia >= 4 || count_hor >= 4 || count_ver >= 4)
+        {
+            return true;
+        }
+
         return false;
     }
 }

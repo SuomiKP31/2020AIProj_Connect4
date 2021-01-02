@@ -42,6 +42,7 @@ public class MinimaxAI : BaseAI
     {
         BestAction = 0;
         List<int> moves = m_gameController.GetPossibleMoves(field);
+        // Debug.Log("sizeof moves is " + moves.Count);
         int step_cnt = 0, ans = 0, tmp, ta = alpha, tb = beta;
 
         if (moves.Count == 0 || maxdepth == 0)
@@ -57,9 +58,9 @@ public class MinimaxAI : BaseAI
             for (int i = 0; i < moves.Count; i++)
             {
                 // Now change the field.
-                for (int j = 0; j < m_gameController.numRows; j++)
+                for (int j = 0; j <= m_gameController.numRows; j++)
                 {
-                    if (field[moves[i], j] != 0)
+                    if (j == m_gameController.numRows || field[moves[i], j] != 0)
                     {
                         field[moves[i], j - 1] = curStepColor;
                         if (MinimaxAICheckWin(j - 1, moves[i]))
@@ -105,9 +106,9 @@ public class MinimaxAI : BaseAI
             for (int i = 0; i < moves.Count; i++)
             {
                 // Now change the field.
-                for (int j = 0; j < m_gameController.numRows; j++)
+                for (int j = 0; j <= m_gameController.numRows; j++)
                 {
-                    if (field[moves[i], j] != 0)
+                    if (j == m_gameController.numRows || field[moves[i], j] != 0)
                     {
                         field[moves[i], j - 1] = curStepColor;
                         if (MinimaxAICheckWin(j - 1, moves[i]))
@@ -163,6 +164,19 @@ public class MinimaxAI : BaseAI
     {
         return a < b ? a : b;
     }
+    public void DumpField()
+    {
+        String ans = "";
+        for(int r = 0; r < m_gameController.numRows; r++)
+        {
+            for(int c = 0; c < m_gameController.numColumns; c++)
+            {
+                ans = ans + field[c,r] + " ";
+            }
+            ans = ans + "\n";
+        }
+        Debug.Log(ans);
+    }
 
     /// <summary>
     /// Return true if the chess at row,column causes terminal in the field, false otherwise.
@@ -175,6 +189,14 @@ public class MinimaxAI : BaseAI
     public bool MinimaxAICheckWin(int row, int column)
     {
         int color = field[column, row];
+        Debug.Log("Color" + color);
+        Debug.Log("H(x)=" + m_heuristic.GetScoreOfBoard(field, color == 1 ? 2 : 1));
+        DumpField();
+        if (m_heuristic.GetLastError() > 1)
+        {
+            Debug.Log("Return from heuristic");
+            return true;
+        }
         int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
         int border_left = min(column, 3);
         int border_right = min(6 - column, 3);
@@ -190,12 +212,10 @@ public class MinimaxAI : BaseAI
             {
                 count_hor++;
                 border_left--;
-                Debug.Log("Find one border left");
             }
             else
             {
-                border_left = 0;
-                Debug.Log("One different border left");
+                break;
             }
         }
 
@@ -205,12 +225,10 @@ public class MinimaxAI : BaseAI
             {
                 count_hor++;
                 border_right--;
-                Debug.Log("Find one border right");
             }
             else
             {
-                border_right = 0;
-                Debug.Log("One different border right");
+                break;
             }
         }
 
@@ -220,12 +238,10 @@ public class MinimaxAI : BaseAI
             {
                 count_ver++;
                 border_up--;
-                Debug.Log("Find one border up");
             }
             else
             {
-                border_up = 0;
-                Debug.Log("One different border up");
+                break;
             }
         }
 
@@ -235,12 +251,11 @@ public class MinimaxAI : BaseAI
             {
                 count_ver++;
                 border_down--;
-                Debug.Log("Find one border down");
+
             }
             else
             {
-                border_down = 0;
-                Debug.Log("One different border down");
+                break;
             }
         }
 
@@ -253,7 +268,7 @@ public class MinimaxAI : BaseAI
             }
             else
             {
-                border_right_up = 0;
+                break;
             }
         }
 
@@ -266,7 +281,7 @@ public class MinimaxAI : BaseAI
             }
             else
             {
-                border_left_down = 0;
+                break;
             }
         }
 
@@ -279,7 +294,7 @@ public class MinimaxAI : BaseAI
             }
             else
             {
-                border_right_down = 0;
+                break;
             }
         }
 
@@ -292,11 +307,12 @@ public class MinimaxAI : BaseAI
             }
             else
             {
-                border_left_up = 0;
+                break;
             }
         }
+        Debug.Log(count_dia_1+","+ count_dia_2 + "," + count_hor + "," + count_ver);
 
-        if (count_dia_1 >= 4 || count_dia_2 >= 4 || count_hor >= 4 || count_ver >= 4)
+        if (count_dia_1 >= 3 || count_dia_2 >= 3 || count_hor >= 3 || count_ver >= 3)
         {
             Debug.Log("Found a win");
             return true;

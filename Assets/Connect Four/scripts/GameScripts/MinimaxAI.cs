@@ -71,13 +71,14 @@ public class MinimaxAI : BaseAI
     }
 
     /// <summary>
-    /// Return true if the chess at row,column causes win in the field, false otherwise.
+    /// Return true if the chess at row,column causes terminal in the field, false otherwise.
+    /// No need to handle the draw game as a special case.
     /// </summary>
     /// <param name="field"> The field. </param>
     /// <param name="row"> Coord </param>
     /// <param name="column"> Coord </param>
     /// <returns></returns>
-    public bool _sh_checkwin(int[,] field,int row,int column)
+    public bool MinimaxAICheckWin(int[,] field,int row,int column)
     {
         return false;
     }

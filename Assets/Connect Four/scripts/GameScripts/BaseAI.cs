@@ -20,6 +20,10 @@ public class BaseAI : MonoBehaviour
     }
     public virtual Vector3 GetAction()
     {
+        if (m_gameController == null)
+        {
+            m_gameController = GameController.GetController();
+        }
         Vector3 spawnPos = new Vector3();
         
         List<int> moves = m_gameController.GetPossibleMoves();

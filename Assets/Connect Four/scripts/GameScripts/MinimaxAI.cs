@@ -11,6 +11,7 @@ public class MinimaxAI : BaseAI
     // Start is called before the first frame update
 
     private int[,] field;
+    public int LastError = 0;
 
     public override Vector3 GetAction()
     {
@@ -20,7 +21,10 @@ public class MinimaxAI : BaseAI
         }
 
         field = m_gameController.GetField();
-        return new Vector3(IDdfs(7, 1, false, 0, 0), 0, 0);
+        int alpha = Int32.MinValue, beta = Int32.MaxValue;
+        IDdfs(7, 1, false, alpha, beta);
+
+        return new Vector3(LastError, 0, 0);
     }
 
     /// <summary>
@@ -34,8 +38,9 @@ public class MinimaxAI : BaseAI
     /// <returns></returns>
     public int IDdfs(int maxdepth, int curStepColor, bool is_max, int alpha, int beta)
     {
-        List<int> moves = m_gameController.GetPossibleMoves();
-        int step_cnt = 0;
+        LastError = 0;
+        List<int> moves = m_gameController.GetPossibleMoves(field);
+        int step_cnt = 0, ans = 0, tmp, ta = alpha, tb = beta;
 
         if (moves.Count == 0 || maxdepth == 0)
         {
@@ -46,18 +51,95 @@ public class MinimaxAI : BaseAI
         if (is_max)
         {
             // Max agent
-            int ans = Int32.MinValue;
+            ans = Int32.MinValue;
             for (int i = 0; i < moves.Count; i++)
             {
                 // Now change the field.
+                for (int j = 0; j < m_gameController.numRows; j++)
+                {
+                    if (field[moves[i], j] == 0)
+                    {
+                        field[moves[i], j] = curStepColor;
+                        if (MinimaxAICheckWin(moves[i], j))
+                        {
+                            // Terminal state.
+                            tmp = m_heuristic.GetScoreOfBoard(field, curStepColor);
+                        }
+                        else
+                        {
+                            // We need to go deeper.
+                            tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
+                        }
+
+                        if (tmp > ans)
+                        {
+                            // Do not use Math.Max here since we need to add Alpha-Beta later.
+                            LastError = moves[i];
+                            ans = tmp;
+                        }
+
+                        if (ans >= beta)
+                        {
+                            return ans;
+                        }
+
+                        alpha = Math.Max(alpha, ans);
+
+                        // Now change back
+                        field[moves[i], j] = 0;
+                    }
+
+                    // Default behavior on error is do nothing and return.
+                }
             }
         }
         else
         {
             // Min agent
+            ans = Int32.MaxValue;
+            for (int i = 0; i < moves.Count; i++)
+            {
+                // Now change the field.
+                for (int j = 0; j < m_gameController.numRows; j++)
+                {
+                    if (field[moves[i], j] == 0)
+                    {
+                        field[moves[i], j] = curStepColor;
+                        if (MinimaxAICheckWin(moves[i], j))
+                        {
+                            // Terminal state.
+                            tmp = m_heuristic.GetScoreOfBoard(field, curStepColor);
+                        }
+                        else
+                        {
+                            // We need to go deeper.
+                            tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
+                        }
+
+                        if (tmp < ans)
+                        {
+                            // Do not use Math.Max here since we need to add Alpha-Beta later.
+                            LastError = moves[i];
+                            ans = tmp;
+                        }
+
+                        if (ans <= alpha)
+                        {
+                            return ans;
+                        }
+
+                        beta = Math.Min(beta, ans);
+
+                        // Now change back
+                        field[moves[i], j] = 0;
+                    }
+
+                    // Default behavior on error is do nothing and return.
+                }
+            }
         }
 
-        return 0;
+        return ans;
     }
 
     public int gcd(int a, int b)
@@ -78,7 +160,7 @@ public class MinimaxAI : BaseAI
     /// <param name="row"> Coord </param>
     /// <param name="column"> Coord </param>
     /// <returns></returns>
-    public bool MinimaxAICheckWin(int[,] field,int row,int column)
+    public bool MinimaxAICheckWin(int row, int column)
     {
         return false;
     }

@@ -178,8 +178,8 @@ public class MinimaxAI : BaseAI
         int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
         int border_left = min(column, 3);
         int border_right = min(6 - column, 3);
-        int border_down = min(row, 3);
-        int border_up = min(5 - row, 3);
+        int border_down = min(5-row, 3);
+        int border_up = min(row, 3);
         int border_left_down = min(border_left, border_down);
         int border_right_up = min(border_right, border_up);
         int border_right_down = min(border_right, border_down);
@@ -190,10 +190,12 @@ public class MinimaxAI : BaseAI
             {
                 count_hor++;
                 border_left--;
+                Debug.Log("Find one border left");
             }
             else
             {
                 border_left = 0;
+                Debug.Log("One different border left");
             }
         }
 
@@ -203,42 +205,48 @@ public class MinimaxAI : BaseAI
             {
                 count_hor++;
                 border_right--;
+                Debug.Log("Find one border right");
             }
             else
             {
                 border_right = 0;
+                Debug.Log("One different border right");
             }
         }
 
         while (border_up > 0)
         {
-            if (field[column, row + border_up] == color)
+            if (field[column, row - border_up] == color)
             {
                 count_ver++;
                 border_up--;
+                Debug.Log("Find one border up");
             }
             else
             {
                 border_up = 0;
+                Debug.Log("One different border up");
             }
         }
 
         while (border_down > 0)
         {
-            if (field[column, row - border_down] == color)
+            if (field[column, row + border_down] == color)
             {
                 count_ver++;
                 border_down--;
+                Debug.Log("Find one border down");
             }
             else
             {
                 border_down = 0;
+                Debug.Log("One different border down");
             }
         }
 
         while (border_right_up > 0)
         {
-            if (field[column + border_right_up, row + border_right_up] == color)
+            if (field[column + border_right_up, row - border_right_up] == color)
             {
                 count_dia_1++;
                 border_right_up--;
@@ -251,7 +259,7 @@ public class MinimaxAI : BaseAI
 
         while (border_left_down > 0)
         {
-            if (field[column - border_left_down, row - border_left_down] == color)
+            if (field[column - border_left_down, row + border_left_down] == color)
             {
                 count_dia_1++;
                 border_left_down--;
@@ -264,7 +272,7 @@ public class MinimaxAI : BaseAI
 
         while (border_right_down > 0)
         {
-            if (field[column + border_right_down, row - border_right_down] == color)
+            if (field[column + border_right_down, row + border_right_down] == color)
             {
                 count_dia_2++;
                 border_right_down--;
@@ -277,7 +285,7 @@ public class MinimaxAI : BaseAI
 
         while (border_left_up > 0)
         {
-            if (field[column - border_left_up, row + border_left_up] == color)
+            if (field[column - border_left_up, row - border_left_up] == color)
             {
                 count_dia_2++;
                 border_left_up--;

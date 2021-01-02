@@ -13,6 +13,7 @@ public class MinimaxAI : BaseAI
     private int[,] field;
     [SerializeField] private int playerNum;
     private int BestAction = 0;
+    [SerializeField] private bool EnableProne = false;
 
     public override Vector3 GetAction()
     {
@@ -23,7 +24,7 @@ public class MinimaxAI : BaseAI
 
         field = m_gameController.GetField().Clone() as int[,];
         int alpha = Int32.MinValue, beta = Int32.MaxValue;
-        IDdfs(7, playerNum, true, alpha, beta);
+        IDdfs(4, playerNum, true, alpha, beta);
 
         return new Vector3(BestAction, 0, 0);
     }
@@ -60,19 +61,22 @@ public class MinimaxAI : BaseAI
                 {
                     if (field[moves[i], j] != 0)
                     {
-                        field[moves[i], j-1] = curStepColor;
-                        if (MinimaxAICheckWin(j-1,moves[i]))
+                        field[moves[i], j - 1] = curStepColor;
+                        if (MinimaxAICheckWin(j - 1, moves[i]))
                         {
                             // Terminal state.
+                            Debug.Log("Returning from terminal state");
                             tmp = m_heuristic.GetScoreOfBoard(field, curStepColor);
                         }
                         else
                         {
                             // We need to go deeper.
+                            //Debug.Log("Calling IDdfs");
                             tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
                         }
+
                         // Now change back
-                        field[moves[i], j-1] = 0;
+                        field[moves[i], j - 1] = 0;
 
                         if (tmp > ans)
                         {
@@ -81,15 +85,13 @@ public class MinimaxAI : BaseAI
                             ans = tmp;
                         }
 
-                        if (ans >= beta)
+                        if (ans >= beta && EnableProne)
                         {
-                            Debug.Log("Now Prone in Max agent with beta "+beta.ToString());
+                            Debug.Log("Now Prone in Max agent with beta " + beta.ToString());
                             return ans;
                         }
 
                         alpha = Math.Max(alpha, ans);
-
-
                     }
 
                     // Default behavior on error is do nothing and return.
@@ -107,19 +109,22 @@ public class MinimaxAI : BaseAI
                 {
                     if (field[moves[i], j] != 0)
                     {
-                        field[moves[i], j-1] = curStepColor;
-                        if (MinimaxAICheckWin(j-1,moves[i]))
+                        field[moves[i], j - 1] = curStepColor;
+                        if (MinimaxAICheckWin(j - 1, moves[i]))
                         {
                             // Terminal state.
+                            Debug.Log("Returning from terminal state");
                             tmp = m_heuristic.GetScoreOfBoard(field, curStepColor);
                         }
                         else
                         {
                             // We need to go deeper.
+                            //Debug.Log("Calling IDdfs");
                             tmp = IDdfs(maxdepth - 1, curStepColor == 1 ? 2 : 1, !is_max, alpha, beta);
                         }
+
                         // Now change back
-                        field[moves[i], j-1] = 0;
+                        field[moves[i], j - 1] = 0;
 
                         if (tmp < ans)
                         {
@@ -128,14 +133,12 @@ public class MinimaxAI : BaseAI
                             ans = tmp;
                         }
 
-                        if (ans <= alpha)
+                        if (ans <= alpha && EnableProne)
                         {
                             return ans;
                         }
 
                         beta = Math.Min(beta, ans);
-
-                        
                     }
 
                     // Default behavior on error is do nothing and return.
@@ -156,7 +159,7 @@ public class MinimaxAI : BaseAI
         return a / gcd(a, b) * b;
     }
 
-    public int min (int a, int b)
+    public int min(int a, int b)
     {
         return a < b ? a : b;
     }
@@ -171,7 +174,7 @@ public class MinimaxAI : BaseAI
     /// <returns></returns>
     public bool MinimaxAICheckWin(int row, int column)
     {
-        int color = field[row, column];
+        int color = field[column, row];
         int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
         int border_left = min(column, 3);
         int border_right = min(6 - column, 3);
@@ -181,9 +184,9 @@ public class MinimaxAI : BaseAI
         int border_right_up = min(border_right, border_up);
         int border_right_down = min(border_right, border_down);
         int border_left_up = min(border_left, border_up);
-        while(border_left > 0)
+        while (border_left > 0)
         {
-            if(field[row, column - border_left] == color)
+            if (field[column - border_left, row] == color)
             {
                 count_hor++;
                 border_left--;
@@ -192,11 +195,11 @@ public class MinimaxAI : BaseAI
             {
                 border_left = 0;
             }
-            
         }
-        while ( border_right > 0)
+
+        while (border_right > 0)
         {
-            if (field[row, column + border_right] == color)
+            if (field[column + border_right, row] == color)
             {
                 count_hor++;
                 border_right--;
@@ -206,9 +209,10 @@ public class MinimaxAI : BaseAI
                 border_right = 0;
             }
         }
-        while(border_up > 0 )
+
+        while (border_up > 0)
         {
-            if(field[row + border_up, column] == color)
+            if (field[column, row + border_up] == color)
             {
                 count_ver++;
                 border_up--;
@@ -217,11 +221,11 @@ public class MinimaxAI : BaseAI
             {
                 border_up = 0;
             }
-            
         }
-        while(border_down > 0)
+
+        while (border_down > 0)
         {
-            if (field[row - border_down, column] == color)
+            if (field[column, row - border_down] == color)
             {
                 count_ver++;
                 border_down--;
@@ -231,9 +235,10 @@ public class MinimaxAI : BaseAI
                 border_down = 0;
             }
         }
-        while(border_right_up > 0 )
+
+        while (border_right_up > 0)
         {
-            if(field[row + border_right_up, column + border_right_up] == color)
+            if (field[column + border_right_up, row + border_right_up] == color)
             {
                 count_dia_1++;
                 border_right_up--;
@@ -242,11 +247,11 @@ public class MinimaxAI : BaseAI
             {
                 border_right_up = 0;
             }
-            
         }
-        while( border_left_down > 0)
+
+        while (border_left_down > 0)
         {
-            if (field[row - border_left_down, column - border_left_down] == color)
+            if (field[column - border_left_down, row - border_left_down] == color)
             {
                 count_dia_1++;
                 border_left_down--;
@@ -256,9 +261,10 @@ public class MinimaxAI : BaseAI
                 border_left_down = 0;
             }
         }
+
         while (border_right_down > 0)
         {
-            if (field[row - border_right_down, column + border_right_down] == color)
+            if (field[column + border_right_down, row - border_right_down] == color)
             {
                 count_dia_2++;
                 border_right_down--;
@@ -268,9 +274,10 @@ public class MinimaxAI : BaseAI
                 border_right_down = 0;
             }
         }
+
         while (border_left_up > 0)
         {
-            if (field[row + border_left_up, column - border_left_up] == color)
+            if (field[column - border_left_up, row + border_left_up] == color)
             {
                 count_dia_2++;
                 border_left_up--;
@@ -280,12 +287,13 @@ public class MinimaxAI : BaseAI
                 border_left_up = 0;
             }
         }
+
         if (count_dia_1 >= 4 || count_dia_2 >= 4 || count_hor >= 4 || count_ver >= 4)
         {
+            Debug.Log("Found a win");
             return true;
         }
 
         return false;
     }
-
 }

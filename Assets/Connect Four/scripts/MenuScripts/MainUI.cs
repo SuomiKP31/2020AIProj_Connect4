@@ -75,6 +75,8 @@ public class MainUI : MonoBehaviour
                 break;
         }
         m_controller.ChangePlayer(index, mod.options[mod.value]);
+        m_controller.ChangePlayerHeuristic(1, m_heur1DropDown.options[m_heur1DropDown.value]);
+        m_controller.ChangePlayerHeuristic(2, m_heur2DropDown.options[m_heur2DropDown.value]);
     }
     
 

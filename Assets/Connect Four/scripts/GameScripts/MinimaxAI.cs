@@ -13,7 +13,8 @@ public class MinimaxAI : BaseAI
     private int[,] field;
     [SerializeField] private int playerNum;
     private int BestAction = 0;
-    [SerializeField] private bool EnableProne = false;
+    [SerializeField] private bool enableProne = false;
+    [SerializeField, Range(0, 30)] private int searchDepth = 1;
 
     public override Vector3 GetAction()
     {
@@ -24,7 +25,7 @@ public class MinimaxAI : BaseAI
 
         field = m_gameController.GetField().Clone() as int[,];
         int alpha = Int32.MinValue, beta = Int32.MaxValue;
-        IDdfs(4, playerNum, true, alpha, beta);
+        IDdfs(searchDepth, playerNum, true, alpha, beta);
 
         return new Vector3(BestAction, 0, 0);
     }
@@ -40,15 +41,18 @@ public class MinimaxAI : BaseAI
     /// <returns></returns>
     public int IDdfs(int maxdepth, int curStepColor, bool is_max, int alpha, int beta)
     {
-        BestAction = 0;
         List<int> moves = m_gameController.GetPossibleMoves(field);
         // Debug.Log("sizeof moves is " + moves.Count);
-        int step_cnt = 0, ans = 0, tmp, ta = alpha, tb = beta;
+        int step_cnt = 0, ans = 0, tmp;
+        if (maxdepth == searchDepth)
+        {
+            BestAction = moves[0];
+        }
 
         if (moves.Count == 0 || maxdepth == 0)
         {
             // Full chess board, draw game || iddfs constraint reached
-            return m_heuristic.GetScoreOfBoard(field, curStepColor);
+            return m_heuristic.GetScoreOfBoard(field, playerNum);
         }
 
         if (is_max)
@@ -58,16 +62,17 @@ public class MinimaxAI : BaseAI
             for (int i = 0; i < moves.Count; i++)
             {
                 // Now change the field.
-                for (int j = 0; j <= m_gameController.numRows; j++)
+                for (int j = m_gameController.numRows - 1; j >= 0; j--)
                 {
-                    if (j == m_gameController.numRows || field[moves[i], j] != 0)
+                    if (field[moves[i], j] == 0)
                     {
-                        field[moves[i], j - 1] = curStepColor;
-                        if (MinimaxAICheckWin(j - 1, moves[i]))
+                        field[moves[i], j] = curStepColor;
+                        //DumpField();
+                        if (MinimaxAICheckWin(j, moves[i]))
                         {
                             // Terminal state.
-                            Debug.Log("Returning from terminal state");
-                            tmp = m_heuristic.GetScoreOfBoard(field, curStepColor);
+                            //Debug.Log("Returning from terminal state");
+                            tmp = m_heuristic.GetScoreOfBoard(field, playerNum);
                         }
                         else
                         {
@@ -77,22 +82,37 @@ public class MinimaxAI : BaseAI
                         }
 
                         // Now change back
-                        field[moves[i], j - 1] = 0;
+                        field[moves[i], j] = 0;
+
 
                         if (tmp > ans)
                         {
                             // Do not use Math.Max here since we need to add Alpha-Beta later.
-                            BestAction = moves[i];
+                            if (maxdepth == searchDepth)
+                            {
+                                Debug.Log("Modified bestAction, from " + BestAction + " to " + moves[i]);
+                                BestAction = moves[i];
+                            }
+
                             ans = tmp;
                         }
 
-                        if (ans >= beta && EnableProne)
+                        if (maxdepth == searchDepth)
                         {
-                            Debug.Log("Now Prone in Max agent with beta " + beta.ToString());
+                            Debug.Log("For action " + moves[i] + ", ans = " + ans + ", tmp = " + tmp);
+                            //Debug.Log("Beta = " + beta.ToString());
+                            //Debug.Log("Alpha = " + alpha);
+                            Debug.Log("bestAction = " + BestAction);
+                        }
+
+                        if (ans >= beta && enableProne)
+                        {
+                            //Debug.Log("Now Prone in Max agent with beta " + beta.ToString());
                             return ans;
                         }
 
                         alpha = Math.Max(alpha, ans);
+                        break;
                     }
 
                     // Default behavior on error is do nothing and return.
@@ -106,16 +126,16 @@ public class MinimaxAI : BaseAI
             for (int i = 0; i < moves.Count; i++)
             {
                 // Now change the field.
-                for (int j = 0; j <= m_gameController.numRows; j++)
+                for (int j = m_gameController.numRows - 1; j >= 0; j--)
                 {
-                    if (j == m_gameController.numRows || field[moves[i], j] != 0)
+                    if (field[moves[i], j] == 0)
                     {
-                        field[moves[i], j - 1] = curStepColor;
-                        if (MinimaxAICheckWin(j - 1, moves[i]))
+                        field[moves[i], j] = curStepColor;
+                        if (MinimaxAICheckWin(j, moves[i]))
                         {
                             // Terminal state.
-                            Debug.Log("Returning from terminal state");
-                            tmp = m_heuristic.GetScoreOfBoard(field, curStepColor);
+                            //Debug.Log("Returning from terminal state");
+                            tmp = m_heuristic.GetScoreOfBoard(field, playerNum);
                         }
                         else
                         {
@@ -125,21 +145,22 @@ public class MinimaxAI : BaseAI
                         }
 
                         // Now change back
-                        field[moves[i], j - 1] = 0;
+                        field[moves[i], j] = 0;
 
                         if (tmp < ans)
                         {
                             // Do not use Math.Max here since we need to add Alpha-Beta later.
-                            BestAction = moves[i];
                             ans = tmp;
                         }
 
-                        if (ans <= alpha && EnableProne)
+                        if (ans <= alpha && enableProne)
                         {
+                            //Debug.Log("Now Prone in Min agent with alpha " + alpha.ToString());
                             return ans;
                         }
 
                         beta = Math.Min(beta, ans);
+                        break;
                     }
 
                     // Default behavior on error is do nothing and return.
@@ -164,17 +185,20 @@ public class MinimaxAI : BaseAI
     {
         return a < b ? a : b;
     }
+
     public void DumpField()
     {
         String ans = "";
-        for(int r = 0; r < m_gameController.numRows; r++)
+        for (int r = 0; r < m_gameController.numRows; r++)
         {
-            for(int c = 0; c < m_gameController.numColumns; c++)
+            for (int c = 0; c < m_gameController.numColumns; c++)
             {
-                ans = ans + field[c,r] + " ";
+                ans = ans + field[c, r] + " ";
             }
+
             ans = ans + "\n";
         }
+
         Debug.Log(ans);
     }
 
@@ -189,18 +213,20 @@ public class MinimaxAI : BaseAI
     public bool MinimaxAICheckWin(int row, int column)
     {
         int color = field[column, row];
-        Debug.Log("Color" + color);
-        Debug.Log("H(x)=" + m_heuristic.GetScoreOfBoard(field, color == 1 ? 2 : 1));
-        DumpField();
+        //Debug.Log("Color" + color);
+        //Debug.Log("H(x)=" + m_heuristic.GetScoreOfBoard(field, color == 1 ? 2 : 1));
+        //DumpField();
+        m_heuristic.GetScoreOfBoard(field, color == 1 ? 2 : 1);
         if (m_heuristic.GetLastError() > 1)
         {
-            Debug.Log("Return from heuristic");
-            return true;
+            Debug.Log("[win] Return from heuristic");
+            //return true;
         }
+
         int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
         int border_left = min(column, 3);
         int border_right = min(6 - column, 3);
-        int border_down = min(5-row, 3);
+        int border_down = min(5 - row, 3);
         int border_up = min(row, 3);
         int border_left_down = min(border_left, border_down);
         int border_right_up = min(border_right, border_up);
@@ -251,7 +277,6 @@ public class MinimaxAI : BaseAI
             {
                 count_ver++;
                 border_down--;
-
             }
             else
             {
@@ -310,7 +335,8 @@ public class MinimaxAI : BaseAI
                 break;
             }
         }
-        Debug.Log(count_dia_1+","+ count_dia_2 + "," + count_hor + "," + count_ver);
+
+        //Debug.Log(count_dia_1 + "," + count_dia_2 + "," + count_hor + "," + count_ver);
 
         if (count_dia_1 >= 3 || count_dia_2 >= 3 || count_hor >= 3 || count_ver >= 3)
         {
@@ -319,5 +345,91 @@ public class MinimaxAI : BaseAI
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Return (utility, action_causing_this_utility), the second parameter may be -1, which means the action is missing.
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="currentDepth">Start from 1, please. Equals to how many MinimaxValue instances exists currently in this thread.</param>
+    /// <param name="currentColor"></param>
+    /// <param name="alpha"></param>
+    /// <param name="beta"></param>
+    /// <param name="lastAction">The action that results in STATE. Use (-1,-1) as default parameter.</param>
+    /// <returns></returns>
+    private (int, int) MinimaxValue(int[,] state, int currentDepth, int currentColor, int alpha, int beta,
+        (int, int) lastAction)
+    {
+        (int, int) ans;
+        ans.Item2 = -1;
+        if (currentDepth == searchDepth)
+        {
+            // Terminal state: max search depth reached
+            // No action is performed, so the action should be -1.
+            ans.Item1 = m_heuristic.GetScoreOfBoard(state, playerNum);
+            return ans;
+        }
+
+        if (!lastAction.Equals((-1, -1)))
+        {
+            // Terminal state: Already win/lose.
+            // Note that MinimaxAICheckWin uses different parameter order.
+            field = state;
+            if (MinimaxAICheckWin(lastAction.Item2, lastAction.Item1))
+            {
+                ans.Item1 = m_heuristic.GetScoreOfBoard(state, playerNum);
+                return ans;
+            }
+        }
+
+        if (currentDepth % 2 == 1)
+        {
+            // Max agent.
+            return MinimaxMaxValue(state, currentDepth, currentColor, alpha, beta);
+        }
+
+        return MinimaxMinValue(state, currentDepth, currentColor, alpha, beta);
+    }
+
+    private (int, int) MinimaxMaxValue(int[,] state, int currentDepth, int currentColor, int alpha, int beta)
+    {
+        List<(int, int)> actions = m_gameController.GetPossibleDetailedMoves(state);
+        (int, int) v = (Int32.MinValue, -1);
+        foreach (var action in actions)
+        {
+            // Modify state.
+            int[,] stateCopy = state.Clone() as int[,];
+            stateCopy[action.Item1, action.Item2] = currentColor;
+            (int, int) tmpValue =
+                MinimaxValue(stateCopy, currentDepth + 1, currentColor == 1 ? 2 : 1, alpha, beta, action);
+            if (v.Item1 < tmpValue.Item1)
+            {
+                // action.Item1 is the column, and it is our action.
+                v.Item2 = action.Item1;
+                v.Item1 = tmpValue.Item1;
+            }
+        }
+
+        return v;
+    }
+
+    private (int, int) MinimaxMinValue(int[,] state, int currentDepth, int currentColor, int alpha, int beta)
+    {
+        List<(int, int)> actions = m_gameController.GetPossibleDetailedMoves(state);
+        (int, int) v = (Int32.MaxValue, -1);
+        foreach (var action in actions)
+        {
+            int[,] stateCopy = state.Clone() as int[,];
+            stateCopy[action.Item1, action.Item2] = currentColor;
+            (int, int) tmpValue =
+                MinimaxValue(stateCopy, currentDepth + 1, currentColor == 1 ? 2 : 1, alpha, beta, action);
+            if (v.Item1 > tmpValue.Item1)
+            {
+                v.Item2 = action.Item1;
+                v.Item1 = tmpValue.Item1;
+            }
+        }
+
+        return v;
     }
 }

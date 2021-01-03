@@ -290,16 +290,36 @@ namespace ConnectFour
 		/// Gets all the possible moves.
 		/// </summary>
 		/// <returns>The possible moves.</returns>
-		public List<int> GetPossibleMoves(int[,] _sh_field)
+		public List<int> GetPossibleMoves(int[,] newField)
 		{
 			List<int> possibleMoves = new List<int>();
 			for (int x = 0; x < numColumns; x++)
 			{
 				for(int y = numRows - 1; y >= 0; y--)
 				{
-					if(_sh_field[x, y] == (int)Piece.Empty)
+					if(newField[x, y] == (int)Piece.Empty)
 					{
 						possibleMoves.Add(x);
+						break;
+					}
+				}
+			}
+			return possibleMoves;
+		}
+		/// <summary>
+		/// Gets all the possible moves in (column,row).
+		/// </summary>
+		/// <returns>The possible moves.</returns>
+		public List<(int,int)> GetPossibleDetailedMoves(int[,] newField)
+		{
+			List<(int,int)> possibleMoves = new List<(int,int)>();
+			for (int x = 0; x < numColumns; x++)
+			{
+				for(int y = numRows - 1; y >= 0; y--)
+				{
+					if(newField[x, y] == (int)Piece.Empty)
+					{
+						possibleMoves.Add((x,y));
 						break;
 					}
 				}

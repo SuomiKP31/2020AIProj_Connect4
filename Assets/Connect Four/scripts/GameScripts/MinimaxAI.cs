@@ -25,9 +25,11 @@ public class MinimaxAI : BaseAI
 
         field = m_gameController.GetField().Clone() as int[,];
         int alpha = Int32.MinValue, beta = Int32.MaxValue;
-        IDdfs(searchDepth, playerNum, true, alpha, beta);
+        // IDdfs(searchDepth, playerNum, true, alpha, beta);
+        (int, int) MinimaxResult = MinimaxValue(m_gameController.GetField().Clone() as int[,], 1, playerNum, alpha,
+            beta, (-1, -1));
 
-        return new Vector3(BestAction, 0, 0);
+        return new Vector3(MinimaxResult.Item2, 0, 0);
     }
 
     /// <summary>
@@ -362,7 +364,7 @@ public class MinimaxAI : BaseAI
     {
         (int, int) ans;
         ans.Item2 = -1;
-        if (currentDepth == searchDepth)
+        if (currentDepth > searchDepth)
         {
             // Terminal state: max search depth reached
             // No action is performed, so the action should be -1.
@@ -395,6 +397,12 @@ public class MinimaxAI : BaseAI
     {
         List<(int, int)> actions = m_gameController.GetPossibleDetailedMoves(state);
         (int, int) v = (Int32.MinValue, -1);
+        if (actions.Count > 0)
+        {
+            // action.Item1 is the column, and it is our action.
+            v.Item2 = actions[0].Item1;
+        }
+
         foreach (var action in actions)
         {
             // Modify state.
@@ -402,12 +410,30 @@ public class MinimaxAI : BaseAI
             stateCopy[action.Item1, action.Item2] = currentColor;
             (int, int) tmpValue =
                 MinimaxValue(stateCopy, currentDepth + 1, currentColor == 1 ? 2 : 1, alpha, beta, action);
+            if (currentDepth == 1)
+            {
+                Debug.Log("Action " + action + ": minimax value = " + tmpValue);
+            }
+
             if (v.Item1 < tmpValue.Item1)
             {
                 // action.Item1 is the column, and it is our action.
                 v.Item2 = action.Item1;
                 v.Item1 = tmpValue.Item1;
+                if (currentDepth == 1)
+                {
+                    Debug.Log("Updated v: " + v);
+                }
             }
+
+            if (enableProne && v.Item1 >= beta)
+            {
+                // Prone!
+                return v;
+            }
+
+            // Update alpha
+            alpha = Math.Max(alpha, v.Item1);
         }
 
         return v;
@@ -428,6 +454,14 @@ public class MinimaxAI : BaseAI
                 v.Item2 = action.Item1;
                 v.Item1 = tmpValue.Item1;
             }
+
+            if (enableProne && v.Item1 <= alpha)
+            {
+                // Prone!
+                return v;
+            }
+
+            beta = Math.Min(beta, v.Item1);
         }
 
         return v;

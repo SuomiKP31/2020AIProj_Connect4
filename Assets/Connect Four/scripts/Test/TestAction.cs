@@ -1,13 +1,26 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class TestAction : MonoBehaviour
 {
     int[,] field = new int [7, 6];
     public static TestAction m_instance;
     public int color = 0;
+
+    [SerializeField] private BaseHeuristic m_testingHeur;
+    private List<int> m_factorList;
+
+    private const int BLOCK = 0;
+    private const int GOOD = 1;
+    private const int WIN = 2;
+    private const int DANGER = 3;
+    private const int LOSE = 4;
+    
     private void Awake()
     {
         if(m_instance != null && m_instance != this)
@@ -152,5 +165,166 @@ public class TestAction : MonoBehaviour
         }
 
         return false;
+    }
+    /// <summary>
+    /// Callback function to calculate test board's heuristic score.
+    /// Note that the test should pass if and only if the board is physically legit(i.e. no floating pieces)
+    /// </summary>
+    /// <returns></returns>
+    public void TestHeuristic()
+    {
+        if (!IsPhysicalLegit())
+        {
+            Debug.LogError("This Board is not physically legit, please adjust.");
+        }
+        m_factorList = m_testingHeur.GetFactorList(); //BlockFac, GoodFac, WinFac, DangerFac, LoseFac
+        List<int> FactorCounters = new List<int> {0,0,0,0,0}; // This count the factors in the order above
+        List<int> LineCounters = new List<int> {0,0,0,0,0}; // This count the connect-4 lines in the order of {block,
+                                                            // good, win, danger, lose}.
+        // Count the horizontal lines
+        for (int c = 0; c < 4; c++)
+        {
+            for (int r = 5; r >= 0; r--)
+            {
+                int[] pieces = {field[c, r],field[c+1, r],field[c+2, r],field[c+3, r]};
+                CountAndEvaluate(pieces, ref FactorCounters, ref LineCounters);
+            }
+        }
+        // Count the vertical lines
+        for (int c = 0; c < 7; c++)
+        {
+            for (int r = 5; r > 2; r--)
+            {
+                int[] pieces = {field[c, r],field[c, r-1],field[c, r-2],field[c, r-3]};
+                CountAndEvaluate(pieces, ref FactorCounters, ref LineCounters);
+            }
+        }
+        // Count diagonal A(upper-left)
+        for (int c = 3; c < 7; c++)
+        {
+            for (int r = 5; r > 2; r--)
+            {
+                int[] pieces = {field[c, r],field[c-1, r-1],field[c-2, r-2],field[c-3, r-3]};
+                CountAndEvaluate(pieces, ref FactorCounters, ref LineCounters);
+            }
+        }
+        // Count diagonal B(upper-right)
+        for (int c = 0; c < 4; c++)
+        {
+            for (int r = 5; r > 2; r--)
+            {
+                int[] pieces = {field[c, r],field[c+1, r-1],field[c+2, r-2],field[c+3, r-3]};
+                CountAndEvaluate(pieces, ref FactorCounters, ref LineCounters);
+            }
+        }
+        
+        Debug.Log(convCounterToString(LineCounters));
+        var heuScore = m_testingHeur.GetScoreOfBoard(field, color);
+        int testScore = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            testScore += FactorCounters[i] * m_factorList[i];
+        }
+
+        if (testScore == heuScore)
+        {
+            Debug.Log("Heuristic Function Implementation Verified.");
+        }
+        else
+        {
+            Debug.LogWarning("The heuristic function might be wrong");
+        }
+    }
+
+    private void CountAndEvaluate(int[] pieces, ref List<int> FactorCounters, ref List<int> LineCounters)
+    {
+        var ourPiece = 0;
+        var advPiece = 0;
+        for (var i = 0; i < 4; i++)
+        {
+            if (pieces[i] == color)
+            {
+                ourPiece++;
+            }
+            else if(pieces[i] == 0)
+            {
+                // Do nothing
+            }
+            else
+            {
+                advPiece++;
+            }
+        }
+        // Empty
+        if (ourPiece + advPiece == 0)
+        {
+            return;
+        }
+        // Win
+        if (ourPiece == 4)
+        {
+            FactorCounters[WIN] += 1;
+            LineCounters[WIN] += 1;
+            return;
+        }
+        // Lose
+        if(advPiece == 4)
+        {
+            FactorCounters[LOSE] += 1;
+            LineCounters[LOSE] += 1;
+            return;
+        }
+        // Block - Nobody can win from this line
+        if (ourPiece != 0 && advPiece != 0)
+        {
+            FactorCounters[BLOCK] += 1;
+            LineCounters[BLOCK] += 1;
+            return;
+        }
+        // Danger or Good
+        if (ourPiece != 0)
+        {
+            FactorCounters[GOOD] += ourPiece;
+            LineCounters[GOOD] += 1;
+        }
+
+        if (advPiece != 0)
+        {
+            FactorCounters[DANGER] += advPiece;
+            LineCounters[DANGER] += 1;
+        }
+    }
+    /// <summary>
+    /// Judge if the current board is physically legit
+    /// </summary>
+    /// <returns>True if no floating pieces present</returns>
+    private bool IsPhysicalLegit()
+    {
+        for (int c = 0; c < 7; c++)
+        {
+            for (int r = 5; r > 0; r--)
+            {
+                if (field[c, r] == 0)
+                {
+                    if (field[c, r - 1] != 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private string convCounterToString(List<int> counter)
+    {
+        string counterstr = String.Empty;
+        for (int i = 0; i < 5; i++)
+        {
+            counterstr += counter[i].ToString() + " ";
+        }
+
+        return counterstr;
     }
 }

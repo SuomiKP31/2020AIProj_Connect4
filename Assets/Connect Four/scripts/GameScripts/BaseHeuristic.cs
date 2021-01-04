@@ -71,7 +71,10 @@ public class BaseHeuristic : MonoBehaviour
     {
         LoseFac = fac;
     }
-
+/// <summary>
+/// 
+/// </summary>
+/// <returns>A list of BlockFac, GoodFac, WinFac, DangerFac, LoseFac, in this particular order</returns>
     public List<int> GetFactorList()
     {
         return new List<int>() {BlockFac, GoodFac, WinFac, DangerFac, LoseFac};

@@ -40,6 +40,10 @@ public class CachedMinimaxAI : BaseAI
         if (enableCache)
         {
             m_cache = new Dictionary<int[,], (int, int)>[cacheLength];
+            for (int i = 0; i < cacheLength; i++)
+            {
+                m_cache[i] = new Dictionary<int[,], (int, int)>();
+            }
         }
 
         m_field = m_gameController.GetField().Clone() as int[,];
@@ -86,12 +90,6 @@ public class CachedMinimaxAI : BaseAI
         //Debug.Log("Color" + color);
         //Debug.Log("H(x)=" + m_heuristic.GetScoreOfBoard(field, color == 1 ? 2 : 1));
         //DumpField();
-        m_heuristic.GetScoreOfBoard(m_field, color == 1 ? 2 : 1);
-        if (m_heuristic.GetLastError() > 1)
-        {
-            Debug.Log("[win] Return from heuristic");
-            //return true;
-        }
 
         int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
         int border_left = min(column, 3);
@@ -210,7 +208,7 @@ public class CachedMinimaxAI : BaseAI
 
         if (count_dia_1 >= 3 || count_dia_2 >= 3 || count_hor >= 3 || count_ver >= 3)
         {
-            Debug.Log("Found a win");
+            //Debug.Log("Found a win");
             return true;
         }
 
@@ -258,9 +256,9 @@ public class CachedMinimaxAI : BaseAI
             if (currentDepth >= cacheLowerBound && currentDepth < cacheLowerBound + cacheLength)
             {
                 // Visit cache.
-                if (m_cache[currentDepth + cacheLowerBound].ContainsKey(state))
+                if (m_cache[currentDepth - cacheLowerBound].ContainsKey(state))
                 {
-                    return m_cache[currentDepth + cacheLowerBound][state];
+                    return m_cache[currentDepth - cacheLowerBound][state];
                 }
 
                 // Cache miss. Fill the cache.
@@ -268,12 +266,12 @@ public class CachedMinimaxAI : BaseAI
                 {
                     // Max agent.
                     ans = MinimaxMaxValue(state, currentDepth, currentColor, alpha, beta);
-                    m_cache[currentDepth + cacheLowerBound].Add(state, ans);
+                    m_cache[currentDepth - cacheLowerBound].Add(state, ans);
                     return ans;
                 }
 
                 ans = MinimaxMinValue(state, currentDepth, currentColor, alpha, beta);
-                m_cache[currentDepth + cacheLowerBound].Add(state, ans);
+                m_cache[currentDepth - cacheLowerBound].Add(state, ans);
                 return ans;
             }
         }

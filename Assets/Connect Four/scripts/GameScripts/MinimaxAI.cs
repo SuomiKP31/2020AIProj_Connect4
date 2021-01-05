@@ -14,7 +14,7 @@ public class MinimaxAI : BaseAI
     [SerializeField] private int playerNum;
     private int BestAction = 0;
     [SerializeField] private bool enableProne = false;
-    [SerializeField, Range(0, 30)] private int searchDepth = 1;
+    
 
     public override Vector3 GetAction()
     {

@@ -13,7 +13,6 @@ public class CachedMinimaxAI : BaseAI
     private int[,] m_field;
     [SerializeField] private int playerNum;
     [SerializeField] private bool enableProne = false;
-    [SerializeField, Range(0, 30)] private int searchDepth = 1;
     [SerializeField] private bool enableCache = false;
 
     /// <summary>

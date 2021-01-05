@@ -14,6 +14,7 @@ public class BaseAI : MonoBehaviour
     protected GameController m_gameController;
     
     [SerializeField] protected BaseHeuristic m_heuristic;
+    [SerializeField, Range(1, 15)] protected int searchDepth = 1;
     private void Start()
     {
         m_gameController = GameController.GetController();
@@ -40,5 +41,15 @@ public class BaseAI : MonoBehaviour
     public void ChangeHeuristic(BaseHeuristic heur)
     {
         m_heuristic = heur;
+    }
+
+    public void ChangeSearchDepth(int val)
+    {
+        searchDepth = val;
+    }
+
+    public int GetSearchDepth()
+    {
+        return searchDepth;
     }
 }

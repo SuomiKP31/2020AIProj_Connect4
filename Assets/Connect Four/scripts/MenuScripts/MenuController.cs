@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using ConnectFour;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -76,7 +74,19 @@ public class MenuController : MonoBehaviour
                 break;
         }
     }
-    
+
+    public void ChangePlayerSearchDepth(int index, int value)
+    {
+        switch (index)
+        {
+            case 1:
+                player1.GetComponent<BaseAI>().ChangeSearchDepth(value);
+                break;
+            case 2:
+                player2.GetComponent<BaseAI>().ChangeSearchDepth(value);
+                break;
+        }
+    }
 
     public void ChangeHeuristicAttribute(Dropdown.OptionData data, HeurAttribute attribute, string value)
     {

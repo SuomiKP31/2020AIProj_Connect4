@@ -12,6 +12,8 @@ public class MainUI : MonoBehaviour
     [SerializeField] private Dropdown m_heur1DropDown;
     [SerializeField] private Dropdown m_heur2DropDown;
     [SerializeField] private Dropdown m_heurConfigDropDown;
+    [SerializeField] private TextChangeWithSlider m_player1DepthSlider;
+    [SerializeField] private TextChangeWithSlider m_player2DepthSlider;
 
     [SerializeField] private List<InputField> m_heurConfigList;
 
@@ -77,6 +79,8 @@ public class MainUI : MonoBehaviour
         m_controller.ChangePlayer(index, mod.options[mod.value]);
         m_controller.ChangePlayerHeuristic(1, m_heur1DropDown.options[m_heur1DropDown.value]);
         m_controller.ChangePlayerHeuristic(2, m_heur2DropDown.options[m_heur2DropDown.value]);
+        m_player1DepthSlider.RefreshTextAndSlider(1);
+        m_player2DepthSlider.RefreshTextAndSlider(2);
     }
     
 

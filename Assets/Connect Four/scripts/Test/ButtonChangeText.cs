@@ -29,6 +29,7 @@ public class ButtonChangeText : MonoBehaviour
         //first column then row, (0,0) on left top
         int value = testManager.changeValue(position_x, position_y);
         ChangeText(value);
+        if(testManager.color == 0) return;
         if(testManager.MinimaxAICheckWin(position_y, position_x))
         {
             Debug.Log("Yes");

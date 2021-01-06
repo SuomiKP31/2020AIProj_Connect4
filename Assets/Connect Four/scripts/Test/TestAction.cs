@@ -42,6 +42,7 @@ public class TestAction : MonoBehaviour
     }
     public bool MinimaxAICheckWin(int row, int column)
     {
+    
         int count_hor = 0, count_ver = 0, count_dia_1 = 0, count_dia_2 = 0;
         int border_left = min(column, 3);
         int border_right = min(6 - column, 3);

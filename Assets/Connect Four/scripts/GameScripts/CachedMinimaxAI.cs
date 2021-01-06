@@ -19,13 +19,13 @@ public class CachedMinimaxAI : BaseAI
     /// cacheLowerBound and cacheLength are ignored when enableCache is false
     /// Layers [cacheLowerBound, cacheLength + cacheLowerBound) are cached.
     /// </summary>
-    [SerializeField, Range(3, 9)] private int cacheLowerBound = 3;
+    [SerializeField, Range(1, 9)] private int cacheLowerBound = 3;
 
     /// <summary>
     /// cacheLowerBound and cacheLength are ignored when enableCache is false
     /// Layers [cacheLowerBound, cacheLength + cacheLowerBound) are cached.
     /// </summary>
-    [SerializeField, Range(1, 10)] private int cacheLength = 5;
+    [SerializeField, Range(1, 12)] private int cacheLength = 5;
 
     private Dictionary<int[,], (int, int)>[] m_cache;
 
